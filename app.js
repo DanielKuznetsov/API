@@ -9,6 +9,7 @@ const app = express();
 // Middleware for POST methods to work
 app.use(morgan("dev"));
 app.use(express.json());
+// app.use(express.static(`${__dirname}/whatever the folder's name is where the static files are`))
 
 // This middleware applies to all requests
 app.use((req, res, next) => {
