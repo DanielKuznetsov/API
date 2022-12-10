@@ -11,6 +11,7 @@ const DB = process.env.DATABASE.replace(
 
 mongoose.set("strictQuery", true);
 
+// Connects to a database
 mongoose.connect(DB, {}).then((con) => {
   console.log("Connected to MongoDB!");
 });
