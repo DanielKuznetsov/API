@@ -11,20 +11,32 @@ exports.getAllTours = async (req, res) => {
 
     // 2) Advanced filtering
     let queryStr = JSON.stringify(queryObj);
-    queryStr = JSON.parse(queryStr.replace(/\b(gte|gt|lte|lt)\b/g, function(match) {
-      console.log(`Match: ${match}`); // -> Match: gte
+    queryStr = JSON.parse(
+      queryStr.replace(/\b(gte|gt|lte|lt)\b/g, function (match) {
+        console.log(`Match: ${match}`); // -> Match: gte
 
-      return `$${match}`
-    })); // -g is needed to replace all, and not just the first one
+        return `$${match}`;
+      })
+    ); // -g is needed to replace all, and not just the first one
 
     let query = Tour.find(queryStr);
 
     // 3) Sorting
-    if(req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(" ");
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
       query = query.sort(sortBy); // -price
     } else {
       query = query.sort("-createdAt");
+    }
+
+    // 4) Limiting
+    if (req.query.fields) {
+      const fields = req.query.fields.split(",").join(" ");
+      query = query.select(fields);
+
+      // query = query.select('name duration price');
+    } else {
+      query = query.select("-__v");
     }
 
     //EXECUTE THE QUERY
