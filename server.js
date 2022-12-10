@@ -1,7 +1,22 @@
-const app = require('./app')
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const app = require("./app");
+
+dotenv.config({ path: "./config.env" });
+
+const DB = process.env.DATABASE.replace(
+  "<PASSWORD>",
+  process.env.DATABASE_PASSWORD
+);
+
+mongoose.set("strictQuery", true);
+
+mongoose.connect(DB, {}).then((con) => {
+  console.log("Connected to MongoDB!");
+});
 
 // Start the server
-const port = 4000;
+const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
