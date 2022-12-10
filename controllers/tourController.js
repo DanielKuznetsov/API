@@ -17,7 +17,15 @@ exports.getAllTours = async (req, res) => {
       return `$${match}`
     })); // -g is needed to replace all, and not just the first one
 
-    const query = Tour.find(queryStr);
+    let query = Tour.find(queryStr);
+
+    // 3) Sorting
+    if(req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(" ");
+      query = query.sort(sortBy); // -price
+    } else {
+      query = query.sort("-createdAt");
+    }
 
     //EXECUTE THE QUERY
     const tours = await query;
